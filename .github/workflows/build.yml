@@ -5,27 +5,61 @@ on:
     branches:
       - main
 
+permissions:
+  contents: write
+
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
+    # Запускаем сборку прямо внутри официального, всегда свежего контейнера Arch Linux
+    container:
+      image: archlinux:latest
+      options: --privileged
+
     steps:
+      # 1. Скачиваем файлы из нашего репозитория GitHub в контейнер
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Import GPG Key
-        uses: crazy-max/ghaction-import-gpg@v6
-        with:
-          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
-          passphrase: ${{ secrets.GPG_PASSPHRASE }}
+      # 2. Подготавливаем чистый Arch Linux (обновляем ключи, ставим утилиты сборки)
+      - name: Prepare Arch Environment
+        run: |
+          pacman -Syu --noconfirm --needed base-devel git sudo
 
-      # Используем официальный инструмент контейнеризации Arch Linux
-      - name: Build Package inside Arch Linux
-        uses: Jguer/aur-build-action@v1
-        with:
-          repo-name: 'os-core'
-          gpg-key-id: 'D58CDACC916A86D0'
-          packages: 'os-welcome'
+      # 3. В Arch Linux запрещено собирать пакеты под root. Создаем временного пользователя build
+      - name: Create Build User
+        run: |
+          useradd -m build
+          echo "build ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+          chown -R build:build .
 
+      # 4. Собираем наш пакет nextos-welcome утилитой makepkg
+      - name: Build Package
+        run: |
+          sudo -u build bash -c "cd nextos-welcome && makepkg -s --noconfirm"
+
+      # 5. Импортируем твой GPG-ключ из секретов GitHub и подписываем пакет + создаем базу данных
+      - name: Sign and Create Repo Database
+        run: |
+          # Создаем папку для готового репозитория
+          mkdir -p output
+          
+          # Копируем скомпилированный пакет (.pkg.tar.zst) в папку output
+          cp nextos-welcome/*.pkg.tar.zst output/
+          
+          # Импортируем твой секретный ключ из секретов GitHub Actions
+          echo "${{ secrets.GPG_PRIVATE_KEY }}" | gpg --batch --import
+          
+          # Переходим в папку и создаем базу данных, подписывая её твоим Key ID
+          cd output
+          repo-add --sign --key "D58CDACC916A86D0" nextos-core.db.tar.gz *.pkg.tar.zst
+
+      # 6. Очищаем папку от мусора перед отправкой (оставляем только готовые файлы репозитория)
+      - name: Fix Permissions
+        run: |
+          chown -R root:root .
+
+      # 7. Выкатываем готовые файлы в ветку gh-pages (используем стандартный проверенный экшен)
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
