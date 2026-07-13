@@ -1,0 +1,34 @@
+name: Build NextOS Repo
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Import GPG Key
+        uses: crazy-max/ghaction-import-gpg@v6
+        with:
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.GPG_PASSPHRASE }}
+
+      # Используем официальный инструмент контейнеризации Arch Linux
+      - name: Build Package inside Arch Linux
+        uses: ArchVisual/arch-repo-builder@v2
+        with:
+          repo-name: 'nextos-core'
+          gpg-key-id: 'ЗАМЕНИ_НА_ТВОЙ_KEY_ID'
+          packages: 'nextos-welcome'
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./output
+          publish_branch: gh-pages
