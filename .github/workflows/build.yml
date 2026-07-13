@@ -20,11 +20,11 @@ jobs:
 
       # Используем официальный инструмент контейнеризации Arch Linux
       - name: Build Package inside Arch Linux
-        uses: ArchVisual/arch-repo-builder@v2
+        uses: Jguer/aur-build-action@v1
         with:
-          repo-name: 'nextos-core'
-          gpg-key-id: 'ЗАМЕНИ_НА_ТВОЙ_KEY_ID'
-          packages: 'nextos-welcome'
+          repo-name: 'os-core'
+          gpg-key-id: 'D58CDACC916A86D0'
+          packages: 'os-welcome'
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
