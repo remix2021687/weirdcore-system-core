@@ -1,5 +1,5 @@
 pkgname=weirdcore-ui
-pkgver=0.0.5
+pkgver=0.0.65
 pkgrel=1
 pkgdesc="UI for Weirdcore linux"
 arch=('any')
