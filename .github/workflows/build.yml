@@ -41,7 +41,7 @@ jobs:
           for pkg in "${PACKAGES[@]}"; do
             echo "==> Сборка пакета: $pkg"
             chown -R build:build "$pkg"
-            sudo -u build bash -c "cd $pkg && makepkg -s --noconfirm"
+            sudo -u build bash -c "cd $pkg && makepkg -sd --noconfirm"
           done
 
       # 5. Импортируем твой GPG-ключ из секретов GitHub и подписываем пакет + создаем базу данных
