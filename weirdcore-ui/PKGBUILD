@@ -5,7 +5,7 @@ pkgdesc="UI for Weirdcore linux"
 arch=('any')
 license=('MIT')
 # Указываем в зависимостях всё, что нужно для работы твоего интерфейса
-depends=('hyprland' 'waybar' 'rofi-lbonn-git' 'swww' 'mako' 'alacritty')
+depends=('hyprland' 'waybar' 'rofi' 'swww' 'mako' 'alacritty')
 
 package() {
     # Создаем папку настроек /etc/skel/.config в будущем пакете
