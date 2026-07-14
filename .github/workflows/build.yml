@@ -36,7 +36,7 @@ jobs:
       # 4. Собираем наш пакет nextos-welcome утилитой makepkg
       - name: Build Package
         run: |
-          PACKAGES=("nextos-desktop-settings")
+          PACKAGES=("weirdcore-ui")
           
           for pkg in "${PACKAGES[@]}"; do
             echo "==> Сборка пакета: $pkg"
@@ -54,7 +54,7 @@ jobs:
           echo "${{ secrets.GPG_PRIVATE_KEY }}" | gpg --batch --import
           
           cd output
-          repo-add --sign --key "D58CDACC916A86D0" nextos-core.db.tar.gz *.pkg.tar.zst
+          repo-add --sign --key "D58CDACC916A86D0" weirdcore-system-core.db.tar.gz *.pkg.tar.zst
 
       # 6. Очищаем папку от мусора перед отправкой (оставляем только готовые файлы репозитория)
       - name: Fix Permissions
