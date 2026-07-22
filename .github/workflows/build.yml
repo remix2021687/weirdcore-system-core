@@ -19,7 +19,7 @@ jobs:
     steps:
       # 1. Скачиваем файлы из нашего репозитория GitHub в контейнер
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v4
 
       # 2. Подготавливаем чистый Arch Linux (обновляем ключи, ставим утилиты сборки)
       - name: Prepare Arch Environment
