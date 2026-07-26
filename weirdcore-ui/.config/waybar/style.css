@@ -10,20 +10,16 @@ window#waybar {
 }
 
 .modules-right {
-    padding: 0 5px;
-    background-color: rgba(0, 0, 0, 0.50);
+    padding: 0;
     border-radius: 6px;
 }
-
-
-
 #workspaces {
+    margin: 10px 4px;
     border-radius: 10px;
-    background-color:rgba(0, 0, 0, 0.50);
+    background-color: rgba(0, 0, 0, 0.70);
 }
 
 #workspaces button {
-    margin: 10px 8px;
     border: none;
     border-radius: 10px;
     transition: 0.5s ease;
@@ -52,7 +48,6 @@ window#waybar {
     border-radius: 10px;
 }
 
-/* === Стили самого нативного меню === */
 menu {
     background-color: #1e1e2e;
     border: 2px solid #FFF;
