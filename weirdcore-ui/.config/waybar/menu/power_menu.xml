@@ -17,15 +17,12 @@
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="sep"/>
-    </child>
-    <child>
       <object class="GtkMenuItem" id="reboot">
         <property name="label">⟳  Перезагрузка</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="poweroff">
+      <object class="GtkMenuItem" id="shutdown">
         <property name="label">⏻  Выключение</property>
       </object>
     </child>
